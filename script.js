@@ -6106,30 +6106,35 @@ const StartScreen = {
     this.pick = this.pick || 'bib';
     const pd = teamDef(this.pick);
     this.color = pd.color; this.shortEdited = false;
+    try { this.gmName = localStorage.getItem('dugout-public-gm') || ''; } catch (e) { this.gmName = ''; }   // 前に使ったGM名を入れておく
     return `<form class="start-box setup" id="setupForm" novalidate>
       <div class="eyebrow">はじめの設定</div>
       <h1 class="setup-title">担当する球団を選ぼう</h1>
-      <fieldset class="field"><legend>あなたが担当する球団（12球団から選ぶ。名前はあとの欄で変えてもOK）</legend>
+      <label class="field"><span>あなたのGM名（名前・ニックネーム）</span><input id="setGm" maxlength="12" value="${E(this.gmName || '')}" placeholder="例：たろう" required autocomplete="off"></label>
+      <fieldset class="field"><legend>担当する球団（12球団から選ぶ）</legend>
         ${[TEAM_CATALOG.central, TEAM_CATALOG.pacific].map(lg => `<div class="pick-lg">${lg.name}</div><div class="pick-grid">${lg.teams.map(t =>
           `<button type="button" class="pick" data-pick="${t.id}" aria-pressed="${t.id === this.pick}" style="--tc:${t.color}"><span class="pick-dot"></span><b>${E(t.name)}</b><small><span class="pk-lbl">本拠地：</span>${E(t.city)}</small></button>`).join('')}</div>`).join('')}
       </fieldset>
-      <fieldset class="field" id="modeField"><legend>遊び方（ふつう／チャレンジモード）</legend><div class="diff-opts mode-opts">
-        <label class="diff-opt"><input type="radio" name="setMode" value="" ${this.modePick ? '' : 'checked'}><b>ふつうに遊ぶ</b><span>期限なし。じっくり球団を育てよう</span></label>
-        ${Object.entries(CHALLENGES).map(([k, c]) => `<label class="diff-opt"><input type="radio" name="setMode" value="${k}" ${this.modePick === k ? 'checked' : ''}><b>チャレンジ：${E(c.name)}</b><span>${E(c.desc)}</span></label>`).join('')}
-      </div></fieldset>
-      <label class="field"><span>球団名</span><input id="setTeam" maxlength="16" value="${E(pd.name)}" required autocomplete="off"></label>
-      <label class="field"><span>略称（スコアボードに出る2〜3文字）</span><input id="setShort" maxlength="3" value="${E(pd.short)}" required autocomplete="off"></label>
-      <label class="field"><span>本拠地の球場名（最初は市民球場。強くなったら大きな球場へ移転できる）</span><input id="setStadium" maxlength="20" value="${E(pd.short)}市民球場" required autocomplete="off"></label>
-      <label class="field"><span>GM名（あなたの名前・ニックネーム）</span><input id="setGm" maxlength="12" value="" placeholder="例：たろう" required autocomplete="off"></label>
       <fieldset class="field"><legend>難易度（あとから球団タブで変えられる）</legend><div class="diff-opts">
         ${Object.entries(DIFFICULTY).map(([k, d]) => `<label class="diff-opt"><input type="radio" name="setDiff" value="${k}" ${k === 'easy' ? 'checked' : ''}><b>${d.name}</b><span>${d.desc}</span></label>`).join('')}
       </div></fieldset>
+      <fieldset class="field" id="modeField"><legend>遊び方</legend>
+        <label class="diff-opt mode-normal"><input type="radio" name="setMode" value="" ${this.modePick ? '' : 'checked'}><b>ふつうに遊ぶ</b><span>期限なし。じっくり球団を育てよう</span></label>
+        <details class="setup-more" ${this.modePick ? 'open' : ''}><summary>チャレンジモードで遊ぶ（${Object.keys(CHALLENGES).length}種類）</summary><div class="diff-opts mode-opts">
+        ${Object.entries(CHALLENGES).map(([k, c]) => `<label class="diff-opt"><input type="radio" name="setMode" value="${k}" ${this.modePick === k ? 'checked' : ''}><b>${E(c.name)}</b><span>${E(c.desc)}</span></label>`).join('')}
+        </div></details>
+      </fieldset>
+      <details class="setup-more" id="nameMore"><summary>球団名・球場名・チームカラーを変える（そのままでもOK）</summary>
+      <label class="field"><span>球団名</span><input id="setTeam" maxlength="16" value="${E(pd.name)}" required autocomplete="off"></label>
+      <label class="field"><span>略称（スコアボードに出る2〜3文字）</span><input id="setShort" maxlength="3" value="${E(pd.short)}" required autocomplete="off"></label>
+      <label class="field"><span>本拠地の球場名（最初は市民球場。強くなったら大きな球場へ移転できる）</span><input id="setStadium" maxlength="20" value="${E(pd.short)}市民球場" required autocomplete="off"></label>
       <fieldset class="field"><legend>チームカラー</legend><div class="swatches">
         ${TEAM_COLORS.map(([c, n], i) => `<button type="button" class="swatch" data-color="${c}" aria-pressed="${i === 0}" aria-label="${n}" title="${n}" style="background:${c}"></button>`).join('')}
       </div></fieldset>
+      </details>
       <p class="setup-error" id="setupError" hidden></p>
-      <div class="start-actions">
-        <button type="submit" class="btn btn-play"><span>${hasSave ? `この内容で始める（スロット${this.newSlot}を上書き）` : `この内容で始める（スロット${this.newSlot}）`}</span></button>
+      <div class="start-actions setup-go">
+        <button type="submit" class="btn btn-play"><span class="go-long">${hasSave ? `この内容で始める（スロット${this.newSlot}を上書き）` : `この内容で始める（スロット${this.newSlot}）`}</span><span class="go-short">${hasSave ? `はじめる（スロット${this.newSlot}を上書き）` : 'はじめる'}</span></button>
         <button type="button" class="btn btn-ghost" data-start="back">戻る</button>
       </div>
       <p class="start-credit">登場する球団・選手・企業はすべて架空です（企業名は有名企業をもじったパロディで、実在の企業とは関係ありません）。お祭りなどの地名・行事は実在のものですが、主催者・関係団体とは関係ありません。進行はこのブラウザの中だけに保存され、外部には送信しません。<br>個人のファンメイド作品で、プロ野球の団体・球団・企業とは関係ありません。<br>© 2026 ゴッホ</p>
@@ -6209,6 +6214,8 @@ const StartScreen = {
         const err = $('setupError');
         err.hidden = false;
         err.textContent = `${missing.join('・')}を入力してください`;
+        if (!profile.gm) { $('setGm').focus(); $('setGm').scrollIntoView({ block: 'center' }); }
+        else { $('nameMore').open = true; }
         return;
       }
       const modeEl = document.querySelector('input[name="setMode"]:checked');

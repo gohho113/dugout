@@ -1019,3 +1019,26 @@ body.on-start .tutorial{display:none}
   .pick-dot{grid-row:auto}
   .pk-lbl{display:none}
 }
+
+/* ---- はじめの設定：しまえる欄と、スマホで下に固定する開始ボタン ---- */
+.setup-more{border:1px solid var(--line);background:rgba(255,255,255,.03);padding:0 14px}
+.setup-more>summary{cursor:pointer;padding:12px 0;font-weight:900;font-size:14px;color:var(--lamp,#ffd23f);list-style:none}
+.setup-more>summary::-webkit-details-marker{display:none}
+.setup-more>summary::before{content:"▶ ";font-size:11px}
+.setup-more[open]>summary::before{content:"▼ "}
+.setup-more[open]{padding-bottom:14px}
+.setup-more[open]>*:not(summary){margin-top:10px}
+.mode-normal{margin-bottom:8px}
+#modeField .setup-more{margin-top:4px}
+@media (max-width:720px){
+  .setup-go{position:sticky;bottom:0;z-index:5;margin:0 -24px -28px;padding:12px 16px calc(12px + env(safe-area-inset-bottom,0px));
+    background:linear-gradient(180deg,rgba(10,20,48,0),rgba(10,20,48,.96) 30%);backdrop-filter:blur(4px)}
+}
+.go-short{display:none}
+@media (max-width:720px){
+  .setup-go{display:flex;flex-direction:row-reverse;gap:8px;align-items:stretch}
+  .setup-go .btn-play{flex:1;min-height:52px;padding:10px 12px}
+  .setup-go .btn-ghost{flex:none;width:auto;padding:10px 14px}
+  .setup-go .go-long{display:none}
+  .setup-go .go-short{display:inline;font-size:18px}
+}
