@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>DUGOUT 球団経営</title>
+<meta name="description" content="プロ野球球団のGMになって、ドラフト・FA・トレード・スポンサー営業まで、編成と経営で日本一をめざすブラウザゲーム。">
+<meta property="og:title" content="DUGOUT（ダグアウト）― 仲間と築く球団経営シミュレーション">
+<meta property="og:description" content="プロ野球球団のGMになって、ドラフト・FA・トレード・スポンサー営業まで、編成と経営で日本一をめざすブラウザゲーム。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://gohho113.github.io/dugout/">
+<meta property="og:image" content="https://gohho113.github.io/dugout/ogp.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://gohho113.github.io/dugout/ogp.png">
+<meta name="theme-color" content="#060b18">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=M+PLUS+1p:wght@400;700;900&family=Oswald:wght@500;700&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- ヘッダー：球団名・シーズン・資金 -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="club" role="button" tabindex="0" data-act="toTitle" aria-label="タイトルに戻る（進行は保存されます）" title="タイトルに戻る（進行は保存されます）">
+        <span class="club-mark" id="clubMark">石</span>
+        <div>
+          <div class="club-name" id="clubName">-</div>
+          <div class="club-sub" id="clubSub">-</div>
+        </div>
+      </div>
+      <div class="top-right">
+        <!-- タイトルに戻る（進行は自動で保存される） -->
+        <button class="gm-btn title-btn" type="button" data-act="toTitle" aria-label="タイトルに戻る" title="タイトルに戻る（進行は保存されます）">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 2 12h3v8h5v-6h4v6h5v-8h3z"/></svg><span>タイトル</span></button>
+        <!-- GMの成績（どの画面からでも見られる） -->
+        <button class="gm-btn" type="button" data-act="gmOpen" aria-label="GMの成績を見る">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10v2h4v3a5 5 0 0 1-4.6 5A5 5 0 0 1 13 15.9V19h3v2H8v-2h3v-3.1A5 5 0 0 1 7.6 13 5 5 0 0 1 3 8V5h4zm0 4H5v1a3 3 0 0 0 2 2.8zm10 0v3.8A3 3 0 0 0 19 8V7z"/></svg><span>GM成績</span></button>
+        <div class="top-funds"><span class="label">資金</span><span class="num" id="topFunds">-</span></div>
+      </div>
+    </div>
+    <!-- タブ（PCでは上、スマホでは下に固定） -->
+    <nav class="tabs" role="tablist" aria-label="画面切り替え">
+      <button class="tab" role="tab" id="tab-dashboard" aria-controls="view-dashboard" data-tab="dashboard">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span>ホーム</span><i class="badge-dot" id="eventDot" hidden></i></button>
+      <button class="tab" role="tab" id="tab-roster" aria-controls="view-roster" data-tab="roster">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm8 1a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM1 21c0-4 3.6-7 8-7s8 3 8 7zm16.5 0c0-2.3-.8-4.3-2.2-5.8A6 6 0 0 1 23 21z"/></svg><span>編成</span></button>
+      <button class="tab" role="tab" id="tab-market" aria-controls="view-market" data-tab="market">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h11l-3-3 1.4-1.4L22 8l-5.6 5.4L15 12l3-3H7zm10 10H6l3 3-1.4 1.4L2 16l5.6-5.4L9 12l-3 3h11z"/></svg><span>補強</span><i class="badge-dot" id="tradeDot" hidden></i></button>
+      <button class="tab" role="tab" id="tab-game" aria-controls="view-game" data-tab="game">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke-width="2"/><path d="M7 5.5c2 2 2 11 0 13M17 5.5c-2 2-2 11 0 13" fill="none" stroke-width="1.6"/></svg><span>試合</span></button>
+      <button class="tab" role="tab" id="tab-office" aria-controls="view-office" data-tab="office">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21V9h4v12zm6 0V3h4v18zm6 0v-8h4v8z"/></svg><span>経営</span></button>
+      <button class="tab" role="tab" id="tab-sales" aria-controls="view-sales" data-tab="sales">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10v4h3l5 4V6L6 10zm13.5 2a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4zM14 3.2v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6z"/></svg><span>営業</span></button>
+      <button class="tab" role="tab" id="tab-club" aria-controls="view-club" data-tab="club">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3 3 6l2 5 2-1v11h10V10l2 1 2-5-5-3a4 4 0 0 1-8 0z"/></svg><span>球団</span></button>
+    </nav>
+  </header>
+
+  <!-- 各画面の中身は script.js が描画する -->
+  <main class="page">
+    <section class="view" id="view-dashboard" role="tabpanel" aria-labelledby="tab-dashboard"></section>
+    <section class="view" id="view-roster" role="tabpanel" aria-labelledby="tab-roster" hidden></section>
+    <section class="view" id="view-market" role="tabpanel" aria-labelledby="tab-market" hidden></section>
+    <section class="view" id="view-game" role="tabpanel" aria-labelledby="tab-game" hidden></section>
+    <section class="view" id="view-office" role="tabpanel" aria-labelledby="tab-office" hidden></section>
+    <section class="view" id="view-sales" role="tabpanel" aria-labelledby="tab-sales" hidden></section>
+    <section class="view" id="view-club" role="tabpanel" aria-labelledby="tab-club" hidden></section>
+  </main>
+
+  <!-- シーズン結果・解任の画面 -->
+  <div class="modal" id="modal" hidden>
+    <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="modalTitle" id="modalBox"></div>
+  </div>
+
+  <!-- タイトル・はじめの設定 -->
+  <div class="start" id="start" hidden></div>
+
+  <div class="toast" id="toast" role="status" hidden></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
