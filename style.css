@@ -1009,3 +1009,13 @@ body.on-start .tutorial{display:none}
 .other-head{font-size:13px;font-weight:900;color:var(--muted);letter-spacing:.08em;display:flex;align-items:center;gap:10px;margin-top:6px}
 .other-head::after{content:"";flex:1;height:1px;background:var(--line)}
 @media (min-width:960px){.cta-btn span{font-size:26px}}
+
+/* ---- スマホでは球団選びを1列に（長い球団名も1行で） ---- */
+@media (max-width:600px){
+  .pick-grid{grid-template-columns:minmax(0,1fr)}
+  .pick{grid-template-columns:auto minmax(0,1fr) auto;padding:10px 12px}
+  .pick b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:14px}
+  .pick small{grid-column:3;grid-row:1;white-space:nowrap}
+  .pick-dot{grid-row:auto}
+  .pk-lbl{display:none}
+}

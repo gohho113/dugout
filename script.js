@@ -6111,7 +6111,7 @@ const StartScreen = {
       <h1 class="setup-title">担当する球団を選ぼう</h1>
       <fieldset class="field"><legend>あなたが担当する球団（12球団から選ぶ。名前はあとの欄で変えてもOK）</legend>
         ${[TEAM_CATALOG.central, TEAM_CATALOG.pacific].map(lg => `<div class="pick-lg">${lg.name}</div><div class="pick-grid">${lg.teams.map(t =>
-          `<button type="button" class="pick" data-pick="${t.id}" aria-pressed="${t.id === this.pick}" style="--tc:${t.color}"><span class="pick-dot"></span><b>${E(t.name)}</b><small>本拠地：${E(t.city)}</small></button>`).join('')}</div>`).join('')}
+          `<button type="button" class="pick" data-pick="${t.id}" aria-pressed="${t.id === this.pick}" style="--tc:${t.color}"><span class="pick-dot"></span><b>${E(t.name)}</b><small><span class="pk-lbl">本拠地：</span>${E(t.city)}</small></button>`).join('')}</div>`).join('')}
       </fieldset>
       <fieldset class="field" id="modeField"><legend>遊び方（ふつう／チャレンジモード）</legend><div class="diff-opts mode-opts">
         <label class="diff-opt"><input type="radio" name="setMode" value="" ${this.modePick ? '' : 'checked'}><b>ふつうに遊ぶ</b><span>期限なし。じっくり球団を育てよう</span></label>
