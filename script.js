@@ -6069,6 +6069,8 @@ const StartScreen = {
       <div class="start-logo">DUG<span>OUT</span></div>
       <div class="start-tag">ダグアウト ─ 仲間が集う場所から、<wbr>頂点へ。</div>
       <p class="start-lead">プロ野球球団のGMになって、選手を集め、育て、お金をやりくりしてリーグ優勝をめざそう。</p>
+      ${this.mainCtaHTML()}
+      <div class="other-head">ほかの遊び方</div>
       ${this.dailyHTML()}
       <div class="daily-card ch-card"><div class="daily-head"><span class="tag-mode">チャレンジモード</span><b>条件つきでGMの腕をためす</b></div>
         <div class="muted small">${Object.values(CHALLENGES).map(c => E(c.name)).join('／')}</div>
@@ -6078,6 +6080,15 @@ const StartScreen = {
       <div class="slots"><div class="muted small">セーブデータ（3つまで。遊んでいるスロットに自動で保存されます）</div>${cards}</div>
       <p class="start-credit">登場する球団・選手・企業はすべて架空です（企業名は有名企業をもじったパロディで、実在の企業とは関係ありません）。お祭りなどの地名・行事は実在のものですが、主催者・関係団体とは関係ありません。セーブはこのブラウザの中だけに保存され、外部には送信しません。<br>個人のファンメイド作品で、プロ野球の団体・球団・企業とは関係ありません。<br>© 2026 ゴッホ</p>
     </div></div>`;
+  },
+  // いちばん大きな入口（ふつうに遊ぶ）。セーブがあれば、最後に遊んだものの「続きから」も出す
+  mainCtaHTML() {
+    const saved = Save.slots().map(n => ({ n, m: Save.summary(n) })).filter(x => x.m).sort((a, b) => (b.m.savedAt || 0) - (a.m.savedAt || 0));
+    const last = saved[0];
+    return `<div class="main-cta">
+      ${last ? `<button class="btn btn-play cta-btn" data-start="continue" data-slot="${last.n}"><span>続きから遊ぶ</span><small>${E(last.m.team)}　${last.m.season}年 ${E(last.m.when)}</small></button>` : ''}
+      <button class="btn ${last ? 'btn-ghost' : 'btn-play'} cta-btn" data-start="newAuto"><span>${last ? '新しく始める' : 'ゲームをはじめる'}</span><small>12球団から1つを選んでGMに。何年でもじっくり遊べる</small></button>
+    </div>`;
   },
   // 今日のお題（タイトルに出す）
   dailyHTML() {
@@ -6169,6 +6180,7 @@ const StartScreen = {
         const g = Save.load(n);
         if (g) this.begin(g); else { UI.toast('セーブを読み込めませんでした'); this.show('title'); }
       } else if (a === 'new') { this.newSlot = n; this.modePick = null; this.show('setup'); }
+      else if (a === 'newAuto') { this.newSlot = Save.slots().find(k => !Save.read(k)) || 1; this.modePick = null; this.show('setup'); }
       else if (a === 'challenge') {
         // 空いているスロット（なければ1）で、チャレンジを選んだ状態の設定画面を開く
         this.newSlot = Save.slots().find(k => !Save.read(k)) || 1;
