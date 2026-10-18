@@ -1048,8 +1048,11 @@ body.on-start .tutorial{display:none}
 .install-btn{width:100%;font-size:15px}
 .install-help{padding:12px 14px;border:1px solid var(--line);background:rgba(255,210,63,.06);font-size:13.5px;line-height:1.7}
 .install-help ol{margin:0;padding-left:1.3em;display:grid;gap:4px}
+.os-tabs{display:flex;gap:4px;margin-bottom:10px}
+.os-tabs button{flex:1;padding:6px 4px;border:1px solid var(--line);background:transparent;color:inherit;font:inherit;font-size:13px;font-weight:700;cursor:pointer;opacity:.7}
+.os-tabs button[aria-selected="true"]{background:var(--lamp,#ffd23f);color:#1b1300;border-color:transparent;opacity:1}
 .ios-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-.ios-steps figure{margin:0;display:grid;gap:6px;justify-items:center;text-align:center}
+.ios-steps figure{margin:0;display:grid;align-content:start;gap:6px;justify-items:center;text-align:center}
 .ios-step{width:100%;max-width:150px;height:auto;display:block}
 .ios-steps figcaption{font-size:12px;line-height:1.5}
 .ios-steps figcaption>b:first-child{display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;background:var(--lamp,#ffd23f);color:#1b1300;font-size:11px;margin-right:2px}

@@ -5960,18 +5960,44 @@ const Install = {
       <rect x="22" y="86" width="34" height="34" rx="8" fill="#0b1a44"/><text x="39" y="101" text-anchor="middle" font-size="9" font-weight="900" fill="#fff" font-style="italic">DUG</text><text x="39" y="113" text-anchor="middle" font-size="9" font-weight="900" fill="${gold}" font-style="italic">OUT</text>
       <rect x="64" y="92" width="76" height="22" rx="4" fill="#25325a"/><text x="70" y="107" font-size="11" fill="#fff">DUGOUT</text></svg>`;
   },
-  // 端末ごとの追加のしかた
-  helpHTML() {
-    if (this.ios) return `<div class="ios-steps">
-        <figure>${this.iosStepSVG(1)}<figcaption><b>1</b> 画面の下の<b>共有ボタン</b>（□に↑）を押す</figcaption></figure>
-        <figure>${this.iosStepSVG(2)}<figcaption><b>2</b> 下にスクロールして「<b>ホーム画面に追加</b>」</figcaption></figure>
-        <figure>${this.iosStepSVG(3)}<figcaption><b>3</b> 右上の「<b>追加</b>」を押す</figcaption></figure>
-      </div>
-      <p class="muted small" style="margin:8px 0 0">※ <b>Safari</b> で開いているときだけできます。LINE・Slack・X などのアプリの中で開いているときは、メニューから「Safariで開く」を選んでからやってください。</p>`;
-    if (/android/i.test(navigator.userAgent)) return `<ol><li><b>Chrome</b> で開く（アプリの中で開いているときは「ブラウザで開く」）</li>
-      <li>右上の <b>︙</b>（メニュー）を押す</li><li>「<b>ホーム画面に追加</b>」または「<b>アプリをインストール</b>」→「<b>インストール</b>」</li></ol>`;
-    return `<ol><li><b>Chrome</b> か <b>Edge</b> で開く</li><li>アドレスバーの右はしにある <b>インストール</b>のマーク（画面に矢印）を押す。見つからなければ右上のメニューから「アプリをインストール」</li>
-      <li>「<b>インストール</b>」を押すと、デスクトップやスタートメニューから開けるようになる</li></ol>`;
+  // Android の手順の絵（1：右上のメニュー／2：ホーム画面に追加／3：インストール）
+  androidStepSVG(n) {
+    const gold = '#ffd23f', frame = `<rect x="6" y="4" width="148" height="232" rx="18" fill="#0b1430" stroke="#5c6b93" stroke-width="3"/><circle cx="80" cy="14" r="3.5" fill="#2a3556"/>`;
+    const ring = (x, y, r) => `<circle cx="${x}" cy="${y}" r="${r}" fill="none" stroke="${gold}" stroke-width="3.5"><animate attributeName="r" values="${r};${r + 4};${r}" dur="1.4s" repeatCount="indefinite"/></circle>`;
+    const bar = `<rect x="10" y="22" width="140" height="28" fill="#1c2747"/><rect x="18" y="28" width="104" height="16" rx="8" fill="#25325a"/><text x="26" y="40" font-size="9" fill="#9fb0d6">gohho113.github.io</text>
+      <g fill="#cfd8f0"><circle cx="138" cy="30" r="1.8"/><circle cx="138" cy="36" r="1.8"/><circle cx="138" cy="42" r="1.8"/></g>`;
+    const page = `<rect x="18" y="58" width="124" height="168" rx="6" fill="#16244a"/><text x="80" y="140" text-anchor="middle" font-size="22" font-weight="900" fill="#fff" font-style="italic">DUG<tspan fill="${gold}">OUT</tspan></text>`;
+    if (n === 1) return `<svg viewBox="0 0 160 240" class="ios-step">${frame}${page}${bar}${ring(138, 36, 13)}</svg>`;
+    if (n === 2) return `<svg viewBox="0 0 160 240" class="ios-step">${frame}${page}${bar}<rect x="18" y="58" width="124" height="168" rx="6" fill="#000" opacity=".35"/>
+      <rect x="54" y="46" width="94" height="150" rx="8" fill="#25325a"/>
+      ${['新しいタブ', '履歴', 'ブックマーク', 'ホーム画面に追加', '共有…'].map((t, i) => `<rect x="58" y="${52 + i * 28}" width="86" height="24" rx="5" fill="${i === 3 ? 'rgba(255,210,63,.18)' : 'none'}"/>
+        <text x="64" y="${68 + i * 28}" font-size="${i === 3 ? 9 : 10}" font-weight="${i === 3 ? 900 : 400}" fill="${i === 3 ? '#fff' : '#9fb0d6'}">${t}</text>`).join('')}
+      <rect x="56" y="134" width="90" height="28" rx="7" fill="none" stroke="${gold}" stroke-width="3"/></svg>`;
+    return `<svg viewBox="0 0 160 240" class="ios-step">${frame}${page}${bar}<rect x="10" y="22" width="140" height="210" fill="#000" opacity=".5"/>
+      <rect x="18" y="78" width="124" height="100" rx="12" fill="#25325a"/>
+      <text x="80" y="98" text-anchor="middle" font-size="10" font-weight="900" fill="#fff">アプリをインストール</text>
+      <rect x="28" y="108" width="26" height="26" rx="6" fill="#0b1a44"/><text x="41" y="119" text-anchor="middle" font-size="7" font-weight="900" fill="#fff" font-style="italic">DUG</text><text x="41" y="129" text-anchor="middle" font-size="7" font-weight="900" fill="${gold}" font-style="italic">OUT</text>
+      <text x="62" y="125" font-size="11" fill="#fff">DUGOUT</text>
+      <text x="48" y="162" text-anchor="middle" font-size="8" fill="#8fd0ff">キャンセル</text>
+      <rect x="78" y="148" width="58" height="20" rx="10" fill="#4da3ff"/><text x="107" y="161.5" text-anchor="middle" font-size="8.5" font-weight="900" fill="#06213f">インストール</text>
+      <rect x="74" y="144" width="66" height="28" rx="14" fill="none" stroke="${gold}" stroke-width="3"><animate attributeName="stroke-width" values="3;5;3" dur="1.4s" repeatCount="indefinite"/></rect></svg>`;
+  },
+  // いま使っている端末（最初に開くタブ）
+  get os() { return this.ios ? 'ios' : /android/i.test(navigator.userAgent) ? 'android' : 'pc'; },
+  // 端末ごとの追加のしかた（iPhone／Android／PC をタブで切りかえ。表示するのは1つだけ）
+  helpHTML(os = this.os) {
+    const steps = (svg, caps) => `<div class="ios-steps">${caps.map((c, i) => `<figure>${svg(i + 1)}<figcaption><b>${i + 1}</b> ${c}</figcaption></figure>`).join('')}</div>`;
+    const body = {
+      ios: steps(n => this.iosStepSVG(n), ['画面の下の<b>共有ボタン</b>（□に↑）を押す', '下にスクロールして「<b>ホーム画面に追加</b>」', '右上の「<b>追加</b>」を押す'])
+        + `<p class="muted small" style="margin:8px 0 0">※ <b>Safari</b> で開いているときだけできます。LINE・Slack・X などのアプリの中で開いているときは、メニューから「Safariで開く」を選んでからやってください。</p>`,
+      android: steps(n => this.androidStepSVG(n), ['右上の <b>︙</b>（メニュー）を押す', '「<b>ホーム画面に追加</b>」を押す', '「<b>インストール</b>」を押す'])
+        + `<p class="muted small" style="margin:8px 0 0">※ <b>Chrome</b> で開いてください。2 は「アプリをインストール」という名前のこともあります。アプリの中で開いているときは、メニューから「ブラウザで開く」を選んでからやってください。</p>`,
+      pc: `<ol><li><b>Chrome</b> か <b>Edge</b> で開く</li><li>アドレスバーの右はしにある <b>インストール</b>のマーク（画面に矢印）を押す。見つからなければ右上のメニューから「アプリをインストール」</li>
+        <li>「<b>インストール</b>」を押すと、デスクトップやスタートメニューから開けるようになる</li></ol>`,
+    };
+    const tabs = [['ios', 'iPhone'], ['android', 'Android'], ['pc', 'PC']];
+    return `<div class="os-tabs" role="tablist">${tabs.map(([k, l]) => `<button type="button" role="tab" data-start="installOs" data-os="${k}" aria-selected="${k === os}">${l}</button>`).join('')}</div>
+      <div class="os-body">${body[os]}</div>`;
   },
   async prompt() {
     if (this.deferred) { const d = this.deferred; this.deferred = null; d.prompt(); try { await d.userChoice; } catch (e) { /* 無視 */ } return true; }
@@ -6223,6 +6249,11 @@ const StartScreen = {
       }
       const a = b.dataset.start, n = Number(b.dataset.slot) || 1;
       if (a !== 'del') this.armedDel = null;
+      if (a === 'installOs') {
+        const h = el.querySelector('.install-help');
+        if (h) h.innerHTML = Install.helpHTML(b.dataset.os);
+        return;
+      }
       if (a === 'install') {
         Install.prompt().then(done => { if (!done) { this.installOpen = !this.installOpen; const h = document.querySelector('.install-help'); if (h) h.hidden = !this.installOpen; } });
         return;
