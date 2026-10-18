@@ -6065,7 +6065,7 @@ const StartScreen = {
         <div class="row-actions"><button class="btn-sm go" data-start="continue" data-slot="${n}">続きから</button>
           <button class="btn-sm ${armed ? 'warn' : ''}" data-start="del" data-slot="${n}">${armed ? '本当に消す' : '消す'}</button></div></div>`;
     }).join('');
-    return `<div class="start-box">
+    return `<div class="start-box title-box"><div class="tb-main">
       <div class="start-logo">DUG<span>OUT</span></div>
       <div class="start-tag">ダグアウト ─ 仲間が集う場所から、<wbr>頂点へ。</div>
       <p class="start-lead">プロ野球球団のGMになって、選手を集め、育て、お金をやりくりしてリーグ優勝をめざそう。</p>
@@ -6074,9 +6074,10 @@ const StartScreen = {
         <div class="muted small">${Object.values(CHALLENGES).map(c => E(c.name)).join('／')}</div>
         <div class="row-actions"><button class="btn-sm go" data-start="challenge">チャレンジを選んで始める</button></div>
         <div class="muted small">「ここで新しく始める」の設定画面の「遊び方」でも選べます</div></div>
+      </div><div class="tb-side">
       <div class="slots"><div class="muted small">セーブデータ（3つまで。遊んでいるスロットに自動で保存されます）</div>${cards}</div>
       <p class="start-credit">登場する球団・選手・企業はすべて架空です（企業名は有名企業をもじったパロディで、実在の企業とは関係ありません）。お祭りなどの地名・行事は実在のものですが、主催者・関係団体とは関係ありません。セーブはこのブラウザの中だけに保存され、外部には送信しません。<br>個人のファンメイド作品で、プロ野球の団体・球団・企業とは関係ありません。<br>© 2026 ゴッホ</p>
-    </div>`;
+    </div></div>`;
   },
   // 今日のお題（タイトルに出す）
   dailyHTML() {
