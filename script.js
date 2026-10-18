@@ -5927,6 +5927,32 @@ const Daily = {
   },
 };
 
+// ---------- ホーム画面に追加（アプリのように全画面で遊べる） ----------
+const Install = {
+  deferred: null,   // Android・PCの Chrome などで「インストールしますか？」を出すための合図
+  get standalone() { return (window.matchMedia && matchMedia('(display-mode: standalone)').matches) || navigator.standalone === true; },
+  get ios() { return /iphone|ipad|ipod/i.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1); },
+  get mobile() { return this.ios || /android/i.test(navigator.userAgent); },
+  init() {
+    window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); this.deferred = e; });
+    window.addEventListener('appinstalled', () => { this.deferred = null; document.querySelectorAll('.install-card').forEach(x => { x.hidden = true; }); UI.toast('ホーム画面に追加しました'); });
+    if ('serviceWorker' in navigator && /^https?:/.test(location.protocol)) navigator.serviceWorker.register('sw.js').catch(() => {});
+  },
+  // 端末ごとの追加のしかた
+  helpHTML() {
+    if (this.ios) return `<ol><li><b>Safari</b> で開く（LINE・Slack・Xなどのアプリの中で開いているときは、右下や右上のメニューから「Safariで開く」）</li>
+      <li>画面の下（iPadは上）の <b>共有ボタン</b>（四角から上向きの矢印）を押す</li><li>「<b>ホーム画面に追加</b>」→ 右上の「<b>追加</b>」</li></ol>`;
+    if (/android/i.test(navigator.userAgent)) return `<ol><li><b>Chrome</b> で開く（アプリの中で開いているときは「ブラウザで開く」）</li>
+      <li>右上の <b>︙</b>（メニュー）を押す</li><li>「<b>ホーム画面に追加</b>」または「<b>アプリをインストール</b>」→「<b>インストール</b>」</li></ol>`;
+    return `<ol><li><b>Chrome</b> か <b>Edge</b> で開く</li><li>アドレスバーの右はしにある <b>インストール</b>のマーク（画面に矢印）を押す。見つからなければ右上のメニューから「アプリをインストール」</li>
+      <li>「<b>インストール</b>」を押すと、デスクトップやスタートメニューから開けるようになる</li></ol>`;
+  },
+  async prompt() {
+    if (this.deferred) { const d = this.deferred; this.deferred = null; d.prompt(); try { await d.userChoice; } catch (e) { /* 無視 */ } return true; }
+    return false;
+  },
+};
+
 // ---------- シーズン結果の「成績カード」（SNSにシェアする画像） ----------
 const ShareCard = {
   W: 1200, H: 675,
@@ -6077,6 +6103,8 @@ const StartScreen = {
         <div class="row-actions"><button class="btn-sm go" data-start="challenge">チャレンジを選んで始める</button></div>
         <div class="muted small">「ここで新しく始める」の設定画面の「遊び方」でも選べます</div></div>
       </div><div class="tb-side">
+      ${Install.standalone ? '' : `<div class="install-card"><button class="btn btn-ghost install-btn" data-start="install">📲 ${Install.mobile ? 'ホーム画面に追加する（アプリのように遊べる）' : 'PCにアプリとして追加する'}</button>
+        <div class="install-help" ${this.installOpen ? '' : 'hidden'}>${Install.helpHTML()}</div></div>`}
       <div class="slots"><div class="muted small">セーブデータ（3つまで。遊んでいるスロットに自動で保存されます）</div>${cards}</div>
       <p class="start-credit">登場する球団・選手・企業はすべて架空です（企業名は有名企業をもじったパロディで、実在の企業とは関係ありません）。お祭りなどの地名・行事は実在のものですが、主催者・関係団体とは関係ありません。セーブはこのブラウザの中だけに保存され、外部には送信しません。<br>個人のファンメイド作品で、プロ野球の団体・球団・企業とは関係ありません。<br>© 2026 ゴッホ</p>
     </div></div>`;
@@ -6169,6 +6197,10 @@ const StartScreen = {
       }
       const a = b.dataset.start, n = Number(b.dataset.slot) || 1;
       if (a !== 'del') this.armedDel = null;
+      if (a === 'install') {
+        Install.prompt().then(done => { if (!done) { this.installOpen = !this.installOpen; const h = document.querySelector('.install-help'); if (h) h.hidden = !this.installOpen; } });
+        return;
+      }
       if (a === 'daily' || a === 'dailyContinue') {
         let g = null;
         if (a === 'dailyContinue') g = Save.load('daily');
@@ -6238,5 +6270,6 @@ let game = null;
 UI.bindEvents();
 Tabs.init();
 StartScreen.bind();
+Install.init();
 Save.migrate();
 StartScreen.show('title');

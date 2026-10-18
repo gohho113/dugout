@@ -1,0 +1,16 @@
+{
+  "name": "DUGOUT（ダグアウト）プロ野球GMシミュレーション",
+  "short_name": "DUGOUT",
+  "description": "12球団から選んでGMになる、プロ野球の球団経営シミュレーション",
+  "lang": "ja",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#060b1d",
+  "theme_color": "#0b1a44",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}
