@@ -41,6 +41,7 @@
 3. 数分後に `https://<ユーザー名>.github.io/<リポジトリ名>/` で遊べるようになる
 
 ※ GitHub の無料プランでは、Pages を使うにはリポジトリを **Public** にする必要があります。
+※ `style.css` / `script.js` を直したら、`index.html` の `?v=…`（版番号）も新しくする。遊んでいる人のブラウザに古いファイルが残らないようにするため
 ※ SNSでURLを貼ったときのカード画像（`index.html` の `og:image`）は `https://gohho113.github.io/dugout/` を前提にしています。公開先を変えたらここも直してください。
 
 ## おことわり
