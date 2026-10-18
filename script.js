@@ -5938,10 +5938,36 @@ const Install = {
     window.addEventListener('appinstalled', () => { this.deferred = null; document.querySelectorAll('.install-card').forEach(x => { x.hidden = true; }); UI.toast('ホーム画面に追加しました'); });
     if ('serviceWorker' in navigator && /^https?:/.test(location.protocol)) navigator.serviceWorker.register('sw.js').catch(() => {});
   },
+  // iPhone の手順の絵（1：共有ボタン／2：ホーム画面に追加／3：追加）。本物の画面ではなく、場所がわかるだけの簡単な絵
+  iosStepSVG(n) {
+    const gold = '#ffd23f', frame = `<rect x="6" y="4" width="148" height="232" rx="22" fill="#0b1430" stroke="#5c6b93" stroke-width="3"/><rect x="58" y="12" width="44" height="8" rx="4" fill="#2a3556"/>`;
+    const share = (x, y, c) => `<g transform="translate(${x} ${y})" stroke="${c}" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M-7 -1 h-3 v13 h20 v-13 h-3"/><path d="M0 -12 v15 M-5 -7 l5 -5 l5 5"/></g>`;
+    const ring = (x, y, r) => `<circle cx="${x}" cy="${y}" r="${r}" fill="none" stroke="${gold}" stroke-width="3.5"><animate attributeName="r" values="${r};${r + 4};${r}" dur="1.4s" repeatCount="indefinite"/></circle>`;
+    const page = `<rect x="18" y="30" width="124" height="150" rx="6" fill="#16244a"/><text x="80" y="95" text-anchor="middle" font-size="22" font-weight="900" fill="#fff" font-style="italic">DUG<tspan fill="${gold}">OUT</tspan></text>`;
+    if (n === 1) return `<svg viewBox="0 0 160 240" class="ios-step">${frame}${page}
+      <rect x="10" y="186" width="140" height="44" rx="0" fill="#1c2747"/><text x="30" y="214" font-size="16" fill="#8fa0c8">‹</text><text x="56" y="214" font-size="16" fill="#8fa0c8">›</text>
+      ${share(80, 208, '#4da3ff')}${ring(80, 206, 17)}<rect x="108" y="200" width="12" height="12" rx="2" fill="none" stroke="#8fa0c8" stroke-width="2"/></svg>`;
+    if (n === 2) return `<svg viewBox="0 0 160 240" class="ios-step">${frame}<rect x="18" y="30" width="124" height="60" rx="6" fill="#16244a" opacity=".5"/>
+      <rect x="14" y="96" width="132" height="136" rx="14" fill="#1c2747"/>
+      ${['コピー', 'ブックマーク', 'ホーム画面に追加', 'リーディングリスト'].map((t, i) => `<rect x="22" y="${106 + i * 30}" width="116" height="24" rx="6" fill="${i === 2 ? 'rgba(255,210,63,.18)' : '#25325a'}"/>
+        <text x="28" y="${123 + i * 30}" font-size="${i === 2 ? 10 : 11}" font-weight="${i === 2 ? 900 : 400}" fill="${i === 2 ? '#fff' : '#9fb0d6'}">${t}</text>
+        ${i === 2 ? `<rect x="120" y="${111 + i * 30}" width="13" height="13" rx="3" fill="none" stroke="#fff" stroke-width="1.8"/><path d="M126.5 ${114 + i * 30} v7 M123 ${117.5 + i * 30} h7" stroke="#fff" stroke-width="1.8"/>` : ''}`).join('')}
+      <rect x="20" y="165" width="120" height="30" rx="8" fill="none" stroke="${gold}" stroke-width="3"/></svg>`;
+    return `<svg viewBox="0 0 160 240" class="ios-step">${frame}<rect x="10" y="26" width="140" height="206" rx="0" fill="#1c2747"/>
+      <text x="18" y="48" font-size="9" fill="#4da3ff">キャンセル</text>
+      <text x="140" y="48" text-anchor="end" font-size="12" font-weight="900" fill="#4da3ff">追加</text>${ring(129, 44, 14)}
+      <text x="80" y="72" text-anchor="middle" font-size="10" font-weight="900" fill="#fff">ホーム画面に追加</text>
+      <rect x="22" y="86" width="34" height="34" rx="8" fill="#0b1a44"/><text x="39" y="101" text-anchor="middle" font-size="9" font-weight="900" fill="#fff" font-style="italic">DUG</text><text x="39" y="113" text-anchor="middle" font-size="9" font-weight="900" fill="${gold}" font-style="italic">OUT</text>
+      <rect x="64" y="92" width="76" height="22" rx="4" fill="#25325a"/><text x="70" y="107" font-size="11" fill="#fff">DUGOUT</text></svg>`;
+  },
   // 端末ごとの追加のしかた
   helpHTML() {
-    if (this.ios) return `<ol><li><b>Safari</b> で開く（LINE・Slack・Xなどのアプリの中で開いているときは、右下や右上のメニューから「Safariで開く」）</li>
-      <li>画面の下（iPadは上）の <b>共有ボタン</b>（四角から上向きの矢印）を押す</li><li>「<b>ホーム画面に追加</b>」→ 右上の「<b>追加</b>」</li></ol>`;
+    if (this.ios) return `<div class="ios-steps">
+        <figure>${this.iosStepSVG(1)}<figcaption><b>1</b> 画面の下の<b>共有ボタン</b>（□に↑）を押す</figcaption></figure>
+        <figure>${this.iosStepSVG(2)}<figcaption><b>2</b> 下にスクロールして「<b>ホーム画面に追加</b>」</figcaption></figure>
+        <figure>${this.iosStepSVG(3)}<figcaption><b>3</b> 右上の「<b>追加</b>」を押す</figcaption></figure>
+      </div>
+      <p class="muted small" style="margin:8px 0 0">※ <b>Safari</b> で開いているときだけできます。LINE・Slack・X などのアプリの中で開いているときは、メニューから「Safariで開く」を選んでからやってください。</p>`;
     if (/android/i.test(navigator.userAgent)) return `<ol><li><b>Chrome</b> で開く（アプリの中で開いているときは「ブラウザで開く」）</li>
       <li>右上の <b>︙</b>（メニュー）を押す</li><li>「<b>ホーム画面に追加</b>」または「<b>アプリをインストール</b>」→「<b>インストール</b>」</li></ol>`;
     return `<ol><li><b>Chrome</b> か <b>Edge</b> で開く</li><li>アドレスバーの右はしにある <b>インストール</b>のマーク（画面に矢印）を押す。見つからなければ右上のメニューから「アプリをインストール」</li>
