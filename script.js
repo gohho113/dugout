@@ -6169,7 +6169,7 @@ const StartScreen = {
         <div class="row-actions"><button class="btn-sm go" data-start="challenge">チャレンジを選んで始める</button></div>
         <div class="muted small">「新しく始める」の設定画面の<span class="nb">「遊び方」でも選べます</span></div></div>
       </div><div class="tb-side">
-      ${Install.standalone ? '' : `<div class="install-card"><button class="btn btn-ghost install-btn" data-start="install">📲 ${Install.mobile ? 'ホーム画面に追加する（アプリのように遊べる）' : 'PCにアプリとして追加する'}</button>
+      ${Install.standalone ? '' : `<div class="install-card"><button class="btn btn-ghost install-btn" data-start="install">📲 ${Install.mobile ? 'ホーム画面に追加する<small class="install-sub">（アプリのように遊べる）</small>' : 'PCにアプリとして追加する'}</button>
         <div class="install-help" ${this.installOpen ? '' : 'hidden'}>${Install.helpHTML()}</div></div>`}
       <p class="start-credit"><span class="nb">登場する球団・選手・企業はすべて架空です（企業名は有名企業をもじったパロディで、実在の企業とは関係ありません）。</span><span class="nb">お祭りなどの地名・行事は実在のものですが、主催者・関係団体とは関係ありません。</span><span class="nb">セーブはこのブラウザの中だけに保存され、外部には送信しません。</span><br><span class="nb">個人のファンメイド作品で、プロ野球の団体・球団・企業とは関係ありません。</span><br>© 2026 ゴッホ</p>
     </div></div>`;

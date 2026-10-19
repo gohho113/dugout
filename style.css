@@ -1063,7 +1063,7 @@ body.on-start .tutorial{display:none}
 
 /* ---- ホーム画面に追加 ---- */
 .install-card{display:grid;gap:8px}
-.install-btn{width:100%;font-size:15px}
+.install-btn{width:100%;font-size:15px;flex-direction:column;gap:0}
 .install-help{padding:12px 14px;border:1px solid var(--line);background:rgba(255,210,63,.06);font-size:13.5px;line-height:1.7}
 .install-help ol{margin:0;padding-left:1.3em;display:grid;gap:4px}
 .os-tabs{display:flex;gap:4px;margin-bottom:10px}
@@ -1089,3 +1089,4 @@ body.on-start .tutorial{display:none}
 .daily-cond .tdot{flex:none;width:10px;height:10px;border-radius:50%;display:inline-block}
 @media (max-width:959px){.daily-cond{grid-template-columns:repeat(2,minmax(0,1fr))}.daily-cond>div:first-child{grid-column:1 / -1}}
 .title-box .tb-main .daily-card .row-actions{justify-content:center}
+.install-sub{display:block;font-size:12px;opacity:.85;margin-top:2px}
