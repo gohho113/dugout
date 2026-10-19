@@ -6168,11 +6168,12 @@ const StartScreen = {
         <div class="row-actions"><button class="btn-sm go" data-start="continue" data-slot="${n}">続きから</button>
           <button class="btn-sm ${armed ? 'warn' : ''}" data-start="del" data-slot="${n}">${armed ? '本当に消す' : '消す'}</button></div></div>`;
     }).join('');
-    return `<div class="start-box title-box"><div class="tb-main">
+    return `<div class="start-box title-box"><div class="tb-hero">
       <div class="start-logo">DUG<span>OUT</span></div>
       <div class="start-tag">ダグアウト ─ 仲間が集う場所から、<wbr>頂点へ。</div>
       <p class="start-lead">プロ野球球団のGMになって、選手を集め、育て、お金をやりくりしてリーグ優勝をめざそう。</p>
       ${this.mainCtaHTML()}
+      </div><div class="tb-main">
       <div class="other-head">ほかの遊び方</div>
       ${this.dailyHTML()}
       <div class="daily-card ch-card"><div class="daily-head"><span class="tag-mode">チャレンジモード</span><b>条件つきでGMの腕をためす</b></div>
