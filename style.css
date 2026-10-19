@@ -994,6 +994,12 @@ body.on-start .tutorial{display:none}
   /* 上半分：タイトルと入口を中央に。下半分：左にほかの遊び方、右にアプリ追加とセーブ */
   .title-box .tb-hero{grid-column:1 / -1;display:grid;gap:14px;justify-items:center;text-align:center;width:min(760px,100%);margin:0 auto 18px}
   .title-box .tb-hero .main-cta{max-width:680px}
+  /* 下半分：今日のお題とチャレンジモードを横に並べ、その下にアプリ追加とおことわり */
+  .title-box .tb-main{grid-column:1 / -1;grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch}
+  .title-box .tb-main .other-head{grid-column:1 / -1}
+  .title-box .tb-main .daily-card{margin:0;align-content:start}
+  .title-box .tb-side{grid-column:1 / -1;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;margin-top:12px}
+  .title-box .tb-side .start-credit{margin:0}
   .title-box .tb-hero .main-cta{width:100%;justify-self:center}
   .title-box .start-logo{font-size:110px}
   .title-box .start-lead{font-size:16px}
@@ -1060,3 +1066,8 @@ body.on-start .tutorial{display:none}
 .ios-step{width:100%;max-width:150px;height:auto;display:block}
 .ios-steps figcaption{font-size:12px;line-height:1.5}
 .ios-steps figcaption>b:first-child{display:inline-grid;place-items:center;width:18px;height:18px;border-radius:50%;background:var(--lamp,#ffd23f);color:#1b1300;font-size:11px;margin-right:2px}
+
+/* ---- セーブデータの画面 ---- */
+.saves-box{width:min(720px,100%)}
+.saves-title{margin:0;font-size:24px}
+.saves-box .slots{margin-top:4px}

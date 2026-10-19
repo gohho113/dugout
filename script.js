@@ -6147,7 +6147,7 @@ const StartScreen = {
     el.hidden = false;
     document.body.classList.add('on-start');
     $('modal').hidden = true;
-    el.innerHTML = mode === 'title' ? this.titleHTML() : this.setupHTML();
+    el.innerHTML = mode === 'title' ? this.titleHTML() : mode === 'saves' ? this.savesHTML() : this.setupHTML();
     const first = el.querySelector('input, button');
     if (first) first.focus();
   },
@@ -6156,6 +6156,26 @@ const StartScreen = {
     document.body.classList.remove('on-start');
   },
   titleHTML() {
+    return `<div class="start-box title-box"><div class="tb-hero">
+      <div class="start-logo">DUG<span>OUT</span></div>
+      <div class="start-tag">ダグアウト ─ 仲間が集う場所から、<wbr>頂点へ。</div>
+      <p class="start-lead">プロ野球球団のGMになって、選手を集め、育て、お金をやりくりしてリーグ優勝をめざそう。</p>
+      ${this.mainCtaHTML()}
+      </div><div class="tb-main">
+      <div class="other-head">ほかの遊び方</div>
+      ${this.dailyHTML()}
+      <div class="daily-card ch-card"><div class="daily-head"><span class="tag-mode">チャレンジモード</span><b>条件つきでGMの腕をためす</b></div>
+        <div class="muted small">${Object.values(CHALLENGES).map(c => E(c.name)).join('／')}</div>
+        <div class="row-actions"><button class="btn-sm go" data-start="challenge">チャレンジを選んで始める</button></div>
+        <div class="muted small">「新しく始める」の設定画面の「遊び方」でも選べます</div></div>
+      </div><div class="tb-side">
+      ${Install.standalone ? '' : `<div class="install-card"><button class="btn btn-ghost install-btn" data-start="install">📲 ${Install.mobile ? 'ホーム画面に追加する（アプリのように遊べる）' : 'PCにアプリとして追加する'}</button>
+        <div class="install-help" ${this.installOpen ? '' : 'hidden'}>${Install.helpHTML()}</div></div>`}
+      <p class="start-credit">登場する球団・選手・企業はすべて架空です（企業名は有名企業をもじったパロディで、実在の企業とは関係ありません）。お祭りなどの地名・行事は実在のものですが、主催者・関係団体とは関係ありません。セーブはこのブラウザの中だけに保存され、外部には送信しません。<br>個人のファンメイド作品で、プロ野球の団体・球団・企業とは関係ありません。<br>© 2026 ゴッホ</p>
+    </div></div>`;
+  },
+  // セーブデータの画面（「続きから遊ぶ」で開く）
+  savesHTML() {
     const cards = Save.slots().map(n => {
       const m = Save.summary(n);
       const armed = this.armedDel === n;
@@ -6168,31 +6188,22 @@ const StartScreen = {
         <div class="row-actions"><button class="btn-sm go" data-start="continue" data-slot="${n}">続きから</button>
           <button class="btn-sm ${armed ? 'warn' : ''}" data-start="del" data-slot="${n}">${armed ? '本当に消す' : '消す'}</button></div></div>`;
     }).join('');
-    return `<div class="start-box title-box"><div class="tb-hero">
-      <div class="start-logo">DUG<span>OUT</span></div>
-      <div class="start-tag">ダグアウト ─ 仲間が集う場所から、<wbr>頂点へ。</div>
-      <p class="start-lead">プロ野球球団のGMになって、選手を集め、育て、お金をやりくりしてリーグ優勝をめざそう。</p>
-      ${this.mainCtaHTML()}
-      </div><div class="tb-main">
-      <div class="other-head">ほかの遊び方</div>
-      ${this.dailyHTML()}
-      <div class="daily-card ch-card"><div class="daily-head"><span class="tag-mode">チャレンジモード</span><b>条件つきでGMの腕をためす</b></div>
-        <div class="muted small">${Object.values(CHALLENGES).map(c => E(c.name)).join('／')}</div>
-        <div class="row-actions"><button class="btn-sm go" data-start="challenge">チャレンジを選んで始める</button></div>
-        <div class="muted small">「ここで新しく始める」の設定画面の「遊び方」でも選べます</div></div>
-      </div><div class="tb-side">
-      ${Install.standalone ? '' : `<div class="install-card"><button class="btn btn-ghost install-btn" data-start="install">📲 ${Install.mobile ? 'ホーム画面に追加する（アプリのように遊べる）' : 'PCにアプリとして追加する'}</button>
-        <div class="install-help" ${this.installOpen ? '' : 'hidden'}>${Install.helpHTML()}</div></div>`}
-      <div class="slots"><div class="muted small">セーブデータ（3つまで。遊んでいるスロットに自動で保存されます）</div>${cards}</div>
-      <p class="start-credit">登場する球団・選手・企業はすべて架空です（企業名は有名企業をもじったパロディで、実在の企業とは関係ありません）。お祭りなどの地名・行事は実在のものですが、主催者・関係団体とは関係ありません。セーブはこのブラウザの中だけに保存され、外部には送信しません。<br>個人のファンメイド作品で、プロ野球の団体・球団・企業とは関係ありません。<br>© 2026 ゴッホ</p>
-    </div></div>`;
+    const any = Save.slots().some(n => Save.summary(n));
+    return `<div class="start-box saves-box">
+      <div class="eyebrow">セーブデータ</div>
+      <h2 class="saves-title">どのデータで遊ぶ？</h2>
+      <div class="muted small">3つまで。遊んでいるスロットに自動で保存されます</div>
+      ${any ? '' : '<p class="muted">セーブデータはありません。</p>'}
+      <div class="slots">${cards}</div>
+      <div class="row-actions"><button type="button" class="btn btn-ghost" data-start="back">タイトルに戻る</button></div>
+    </div>`;
   },
   // いちばん大きな入口（ふつうに遊ぶ）。セーブがあれば、最後に遊んだものの「続きから」も出す
   mainCtaHTML() {
     const saved = Save.slots().map(n => ({ n, m: Save.summary(n) })).filter(x => x.m).sort((a, b) => (b.m.savedAt || 0) - (a.m.savedAt || 0));
     const last = saved[0];
     return `<div class="main-cta">
-      ${last ? `<button class="btn btn-play cta-btn" data-start="continue" data-slot="${last.n}"><span>続きから遊ぶ</span><small>${E(last.m.team)}　${last.m.season}年 ${E(last.m.when)}</small></button>` : ''}
+      ${last ? `<button class="btn btn-play cta-btn" data-start="saves"><span>続きから遊ぶ</span><small>セーブデータを選ぶ（最後に遊んだのは ${E(last.m.team)}　${last.m.season}年 ${E(last.m.when)}）</small></button>` : ''}
       <button class="btn ${last ? 'btn-ghost' : 'btn-play'} cta-btn" data-start="newAuto"><span>${last ? '新しく始める' : 'ゲームをはじめる'}</span><small>12球団から1つを選んでGMに。何年でもじっくり遊べる</small></button>
     </div>`;
   },
@@ -6309,10 +6320,11 @@ const StartScreen = {
         const f = $('modeField'); if (f) f.scrollIntoView({ block: 'start' });
       }
       else if (a === 'del') {
-        if (this.armedDel !== n) { this.armedDel = n; this.show('title'); return; }
-        this.armedDel = null; Save.clear(n); this.show('title'); UI.toast(`スロット${n}のセーブを消しました`);
+        if (this.armedDel !== n) { this.armedDel = n; this.show('saves'); return; }
+        this.armedDel = null; Save.clear(n); this.show('saves'); UI.toast(`スロット${n}のセーブを消しました`);
       }
       else if (a === 'back') this.show('title');
+      else if (a === 'saves') this.show('saves');
     });
     // 球団名から略称を自動で入れる（略称を自分で書いたらそのまま）
     el.addEventListener('input', e => {
