@@ -6211,10 +6211,13 @@ const StartScreen = {
   dailyHTML() {
     const c = Daily.cond(), best = Daily.best(c.date);
     const j = Save.read('daily'), going = j && j.daily && j.daily.date === c.date && !j.daily.done;
-    return `<div class="daily-card"><div class="daily-head"><span class="tag-mode">今日のお題</span><b>${E(Daily.label(c))}</b></div>
-      <div class="muted small">全員が同じ条件で1シーズンだけ戦う。GM評価で友だちと勝負！${best ? `　今日のベスト <b class="good">${best}点</b>` : ''}</div>
+    const [, mo, da] = c.date.split('-').map(Number);
+    return `<div class="daily-card"><div class="daily-head"><span class="tag-mode">今日のお題</span><b>${mo}/${da}　<span class="nb">全員が同じ条件で1シーズン勝負</span></b></div>
+      <div class="daily-cond"><div><span>球団</span><b><i class="tdot" style="background:${E(c.team.color)}"></i>${E(c.team.name)}</b></div>
+        <div><span>難易度</span><b>${E(DIFFICULTY[c.difficulty].name)}</b></div><div><span>特別ルール</span><b>${E(DAILY_RULES[c.rule].name)}</b></div></div>
       <div class="row-actions">${going ? '<button class="btn-sm go" data-start="dailyContinue">続きから</button>' : ''}
-        <button class="btn-sm ${going ? '' : 'go'}" data-start="daily">${going ? '最初から挑戦しなおす' : best ? 'もう一度挑戦する' : '挑戦する'}</button></div></div>`;
+        <button class="btn-sm ${going ? '' : 'go'}" data-start="daily">${going ? '最初から挑戦しなおす' : best ? 'もう一度挑戦する' : '挑戦する'}</button></div>
+      <div class="muted small">GM評価で友だちと勝負！${best ? `今日のベスト <b class="good">${best}点</b>。` : ''}お題は毎日かわります</div></div>`;
   },
   setupHTML() {
     const d = INITIAL_DATA.profile;
