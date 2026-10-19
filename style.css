@@ -1004,7 +1004,6 @@ body.on-start .tutorial{display:none}
     .title-box .tb-main .other-head{margin-bottom:16px}
     .title-box .tb-main .daily-card{grid-row:span 4;grid-template-rows:subgrid;row-gap:8px}
   }
-  .title-box .tb-main .daily-card .row-actions{justify-content:center}
   .title-box .tb-side{grid-column:1 / -1;justify-items:center;margin-top:12px}
   .title-box .tb-side .install-card{width:min(520px,100%);justify-items:center}
   .title-box .tb-side .install-help{width:100%}
@@ -1089,3 +1088,4 @@ body.on-start .tutorial{display:none}
 .daily-cond b{font-size:13px;display:flex;align-items:center;gap:5px;line-height:1.3}
 .daily-cond .tdot{flex:none;width:10px;height:10px;border-radius:50%;display:inline-block}
 @media (max-width:959px){.daily-cond{grid-template-columns:repeat(2,minmax(0,1fr))}.daily-cond>div:first-child{grid-column:1 / -1}}
+.title-box .tb-main .daily-card .row-actions{justify-content:center}

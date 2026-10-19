@@ -6167,7 +6167,7 @@ const StartScreen = {
       <div class="daily-card ch-card"><div class="daily-head"><span class="tag-mode">チャレンジモード</span><b>条件つきでGMの腕をためす</b></div>
         <div class="muted small">${Object.values(CHALLENGES).map(c => `<span class="nb">${E(c.name)}</span>`).join('／')}</div>
         <div class="row-actions"><button class="btn-sm go" data-start="challenge">チャレンジを選んで始める</button></div>
-        <div class="muted small">「新しく始める」の設定画面の「遊び方」でも選べます</div></div>
+        <div class="muted small">「新しく始める」の設定画面の<span class="nb">「遊び方」でも選べます</span></div></div>
       </div><div class="tb-side">
       ${Install.standalone ? '' : `<div class="install-card"><button class="btn btn-ghost install-btn" data-start="install">📲 ${Install.mobile ? 'ホーム画面に追加する（アプリのように遊べる）' : 'PCにアプリとして追加する'}</button>
         <div class="install-help" ${this.installOpen ? '' : 'hidden'}>${Install.helpHTML()}</div></div>`}
