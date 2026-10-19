@@ -6203,8 +6203,8 @@ const StartScreen = {
     const saved = Save.slots().map(n => ({ n, m: Save.summary(n) })).filter(x => x.m).sort((a, b) => (b.m.savedAt || 0) - (a.m.savedAt || 0));
     const last = saved[0];
     return `<div class="main-cta">
-      ${last ? `<button class="btn btn-play cta-btn" data-start="saves"><span>続きから遊ぶ</span><small>セーブデータを選ぶ（最後に遊んだのは ${E(last.m.team)}　${last.m.season}年 ${E(last.m.when)}）</small></button>` : ''}
-      <button class="btn ${last ? 'btn-ghost' : 'btn-play'} cta-btn" data-start="newAuto"><span>${last ? '新しく始める' : 'ゲームをはじめる'}</span><small>12球団から1つを選んでGMに。何年でもじっくり遊べる</small></button>
+      ${last ? `<button class="btn btn-play cta-btn" data-start="saves"><span>続きから遊ぶ</span><small><span class="nb">セーブデータを選ぶ</span><span class="nb">（最後に遊んだのは</span> <span class="nb">${E(last.m.team)}</span>　<span class="nb">${last.m.season}年 ${E(last.m.when)}）</span></small></button>` : ''}
+      <button class="btn ${last ? 'btn-ghost' : 'btn-play'} cta-btn" data-start="newAuto"><span>${last ? '新しく始める' : 'ゲームをはじめる'}</span><small><span class="nb">12球団から1つを選んでGMに。</span><span class="nb">何年でもじっくり遊べる</span></small></button>
     </div>`;
   },
   // 今日のお題（タイトルに出す）
