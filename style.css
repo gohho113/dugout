@@ -998,6 +998,12 @@ body.on-start .tutorial{display:none}
   .title-box .tb-main{grid-column:1 / -1;grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch}
   .title-box .tb-main .other-head{grid-column:1 / -1}
   .title-box .tb-main .daily-card{margin:0;align-content:start}
+  /* 2枚のカードの行（見出し／説明／ボタン／補足）をそろえて、ボタンの高さを合わせる */
+  @supports (grid-template-rows:subgrid){
+    .title-box .tb-main{grid-template-rows:auto repeat(4,auto);row-gap:0}
+    .title-box .tb-main .other-head{margin-bottom:16px}
+    .title-box .tb-main .daily-card{grid-row:span 4;grid-template-rows:subgrid;row-gap:8px}
+  }
   .title-box .tb-main .daily-card .row-actions{justify-content:center}
   .title-box .tb-side{grid-column:1 / -1;justify-items:center;margin-top:12px}
   .title-box .tb-side .install-card{width:min(520px,100%);justify-items:center}
