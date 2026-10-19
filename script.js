@@ -6165,13 +6165,13 @@ const StartScreen = {
       <div class="other-head">ほかの遊び方</div>
       ${this.dailyHTML()}
       <div class="daily-card ch-card"><div class="daily-head"><span class="tag-mode">チャレンジモード</span><b>条件つきでGMの腕をためす</b></div>
-        <div class="muted small">${Object.values(CHALLENGES).map(c => E(c.name)).join('／')}</div>
+        <div class="muted small">${Object.values(CHALLENGES).map(c => `<span class="nb">${E(c.name)}</span>`).join('／')}</div>
         <div class="row-actions"><button class="btn-sm go" data-start="challenge">チャレンジを選んで始める</button></div>
         <div class="muted small">「新しく始める」の設定画面の「遊び方」でも選べます</div></div>
       </div><div class="tb-side">
       ${Install.standalone ? '' : `<div class="install-card"><button class="btn btn-ghost install-btn" data-start="install">📲 ${Install.mobile ? 'ホーム画面に追加する（アプリのように遊べる）' : 'PCにアプリとして追加する'}</button>
         <div class="install-help" ${this.installOpen ? '' : 'hidden'}>${Install.helpHTML()}</div></div>`}
-      <p class="start-credit">登場する球団・選手・企業はすべて架空です（企業名は有名企業をもじったパロディで、実在の企業とは関係ありません）。お祭りなどの地名・行事は実在のものですが、主催者・関係団体とは関係ありません。セーブはこのブラウザの中だけに保存され、外部には送信しません。<br>個人のファンメイド作品で、プロ野球の団体・球団・企業とは関係ありません。<br>© 2026 ゴッホ</p>
+      <p class="start-credit"><span class="nb">登場する球団・選手・企業はすべて架空です（企業名は有名企業をもじったパロディで、実在の企業とは関係ありません）。</span><span class="nb">お祭りなどの地名・行事は実在のものですが、主催者・関係団体とは関係ありません。</span><span class="nb">セーブはこのブラウザの中だけに保存され、外部には送信しません。</span><br><span class="nb">個人のファンメイド作品で、プロ野球の団体・球団・企業とは関係ありません。</span><br>© 2026 ゴッホ</p>
     </div></div>`;
   },
   // セーブデータの画面（「続きから遊ぶ」で開く）
