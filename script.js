@@ -805,11 +805,11 @@ function uniformSVG(u, num = 18) {
     ? `<path d="${shape}" fill="none" stroke="${u.accent}" stroke-width="6"/><path d="M100 26 L100 ${placketEnd}" stroke="${u.accent}" stroke-width="3"/>`
     : `<path d="M100 26 L100 ${placketEnd}" stroke="${u.accent}" stroke-width="1.5" opacity=".6"/>`;
   const t = String(u.text || '').slice(0, 10);
-  const fs = Math.max(13, Math.min(30, Math.round(150 / Math.max(3, t.length) * 1.1)));
+  const fs = Math.max(11, Math.min(18, Math.round(120 / Math.max(4, t.length))));   // 胸におさまる大きさ（短い文字でも大きくしすぎない）
   const font = u.font === 'block' ? `font-family="Impact,'Arial Black',sans-serif" font-weight="900"` : `font-family="'Brush Script MT','Segoe Script',cursive" font-style="italic" font-weight="700"`;
-  const ty = 84 + fs / 3;
+  const ty = 70 + fs / 3;   // 胸の高さ
   const shadow = u.shadow === '1' ? `<text x="102.5" y="${ty + 2.5}" text-anchor="middle" font-size="${fs}" ${font} fill="${u.accent}">${E(t)}</text>` : '';
-  const swoosh = u.swoosh === '1' ? `<path d="M62 ${ty + 8} Q110 ${ty + 2} 150 ${ty - 12}" fill="none" stroke="${u.accent}" stroke-width="6" stroke-linecap="round"/><path d="M62 ${ty + 8} Q110 ${ty + 2} 150 ${ty - 12}" fill="none" stroke="${u.main}" stroke-width="3.2" stroke-linecap="round"/>` : '';
+  const swoosh = u.swoosh === '1' ? `<path d="M66 ${ty + 7} Q108 ${ty + 2} 142 ${ty - 9}" fill="none" stroke="${u.accent}" stroke-width="5" stroke-linecap="round"/><path d="M66 ${ty + 7} Q108 ${ty + 2} 142 ${ty - 9}" fill="none" stroke="${u.main}" stroke-width="2.6" stroke-linecap="round"/>` : '';
   return `<svg class="uni-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="ユニフォーム">
     <defs><clipPath id="${id}c"><path d="${shape}"/></clipPath>
       <linearGradient id="${id}g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${u.body}"/><stop offset="1" stop-color="${u.main}"/></linearGradient></defs>
@@ -818,7 +818,7 @@ function uniformSVG(u, num = 18) {
     <path d="M86 12 Q100 26 114 12" fill="none" stroke="${u.accent}" stroke-width="5"/>
     <path d="M32 86 L14 52 M168 86 L186 52" stroke="${u.accent}" stroke-width="6"/>
     <path d="${shape}" fill="none" stroke="rgba(0,0,0,.35)" stroke-width="2"/>
-    <g transform="rotate(-6 100 84)">${swoosh}${shadow}
+    <g transform="rotate(-6 100 70)">${swoosh}${shadow}
       <text x="100" y="${ty}" text-anchor="middle" font-size="${fs}" ${font} fill="${u.main}" stroke="${u.accent}" stroke-width="1.4" paint-order="stroke">${E(t)}</text></g>
     <text x="74" y="150" text-anchor="middle" font-size="24" font-family="Impact,'Arial Black',sans-serif" fill="${u.main}" stroke="${u.accent}" stroke-width="1.2" paint-order="stroke">${num}</text>
   </svg>`;
