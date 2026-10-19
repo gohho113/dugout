@@ -768,6 +768,8 @@ const uniTemplate = (id, T, text) => {
 const UNIFORM_COST = 1000;   // 新ユニフォームの発表にかかるお金（万円）
 const UNIFORM_HYPE = 5;      // 発表後、グッズが売れやすい試合数
 const defaultUniform = (color, text) => uniTemplate('home', color || '#1f366a', text || 'TEAM');
+// 胸の文字：選んだ球団の略称のままならローマ字（Hiroshima など）、自分で変えた略称ならそれを使う
+const chestText = pf => { const t = teamDef(pf.pick); return t && t.en && pf.short === t.short ? t.en : pf.short; };
 let uniSeq = 0;
 // ユニフォームの絵（前から見た形）。num は背番号（胸の左下に小さく入る）
 function uniformSVG(u, num = 18) {
@@ -1704,7 +1706,7 @@ const EVENTS = [
     cond: () => true,
     make: g => { const c = () => Rand.pick(UNI_COLORS);
       let main = c(); while (main === '#ffffff') main = c();
-      return { u: { body: Rand.pick(['#ffffff', '#efe9dc', '#111111', '#1f366a']), main, accent: c(), pattern: Rand.pick(Object.keys(UNI_PATTERNS)), font: Rand.pick(Object.keys(UNI_FONTS)), text: g.team.short } }; },
+      return { u: { body: Rand.pick(['#ffffff', '#efe9dc', '#111111', '#1f366a']), main, accent: c(), pattern: Rand.pick(Object.keys(UNI_PATTERNS)), font: Rand.pick(Object.keys(UNI_FONTS)), text: chestText(g.profile) } }; },
     text: (g, d) => `ファンから「新しいユニフォームのデザイン案」を募集したら、1位に選ばれたのは「${UNI_PATTERNS[d.u.pattern]}」に${UNI_FONTS[d.u.font]}の文字が入ったデザインだった。`,
     choices: [
       { label: 'ファン案を採用して発表する', desc: 'お金はかからない。ファン+800人・3試合グッズが売れる（デザインは球団タブで見られる）',
@@ -2132,20 +2134,20 @@ const INITIAL_DATA = {
 // festival：その街の有名なお祭り（試合前の出来事で使う）
 const TEAM_CATALOG = {
   central: { name: 'セントラ・リーグ', teams: [
-    { id: 'bib', name: '東京ギガンテス',       short: '東京',   color: '#f97709', strength: 70, city: '東京',   festival: '神田祭' },
-    { id: 'jin', name: '神宮スウィフツ',       short: '神宮',   color: '#1b4d8f', strength: 62, city: '東京',   festival: '隅田川花火大会' },
-    { id: 'tom', name: '横浜ベイシューターズ', short: '横浜',   color: '#0055a5', strength: 63, city: '横浜',   festival: '横浜開港祭' },
-    { id: 'spr', name: '名古屋ドラグーンズ',   short: '名古屋', color: '#002569', strength: 64, city: '名古屋', festival: '名古屋まつり' },
-    { id: 'tky', name: '西宮ベンガルズ',       short: '西宮',   color: '#ffd400', strength: 68, city: '西宮',   festival: '十日えびす' },
-    { id: 'nnw', name: '広島レッドコイズ',     short: '広島',   color: '#e60012', strength: 61, city: '広島',   festival: 'ひろしまフラワーフェスティバル' },
+    { id: 'bib', name: '東京ギガンテス',       short: '東京', en: 'Tokyo',   color: '#f97709', strength: 70, city: '東京',   festival: '神田祭' },
+    { id: 'jin', name: '神宮スウィフツ',       short: '神宮', en: 'Jingu',   color: '#1b4d8f', strength: 62, city: '東京',   festival: '隅田川花火大会' },
+    { id: 'tom', name: '横浜ベイシューターズ', short: '横浜', en: 'Yokohama',   color: '#0055a5', strength: 63, city: '横浜',   festival: '横浜開港祭' },
+    { id: 'spr', name: '名古屋ドラグーンズ',   short: '名古屋', en: 'Nagoya', color: '#002569', strength: 64, city: '名古屋', festival: '名古屋まつり' },
+    { id: 'tky', name: '西宮ベンガルズ',       short: '西宮', en: 'Bengals',   color: '#ffd400', strength: 68, city: '西宮',   festival: '十日えびす' },
+    { id: 'nnw', name: '広島レッドコイズ',     short: '広島', en: 'Hiroshima',   color: '#e60012', strength: 61, city: '広島',   festival: 'ひろしまフラワーフェスティバル' },
   ] },
   pacific: { name: 'パシフィカ・リーグ', teams: [
-    { id: 'yok', name: '福岡ファルコンズ',     short: '福岡',   color: '#f5c700', strength: 72, city: '福岡', festival: '博多どんたく' },
-    { id: 'ngy', name: '北海道ウォリアーズ',   short: '北海道', color: '#006298', strength: 64, city: '札幌', festival: 'さっぽろ雪まつり' },
-    { id: 'hir', name: '仙台グリフォンズ',     short: '仙台',   color: '#860010', strength: 60, city: '仙台', festival: '仙台七夕まつり' },
-    { id: 'kob', name: '千葉セイラーズ',       short: '千葉',   color: '#222222', strength: 63, city: '千葉', festival: '幕張ビーチ花火フェスタ' },
-    { id: 'snd', name: '埼玉レオンズ',         short: '埼玉',   color: '#1f366a', strength: 66, city: '所沢', festival: '所沢まつり' },
-    { id: 'hkt', name: '大阪バイソンズ',       short: '大阪',   color: '#0a1f4d', strength: 67, city: '大阪', festival: '天神祭' },
+    { id: 'yok', name: '福岡ファルコンズ',     short: '福岡', en: 'Fukuoka',   color: '#f5c700', strength: 72, city: '福岡', festival: '博多どんたく' },
+    { id: 'ngy', name: '北海道ウォリアーズ',   short: '北海道', en: 'Hokkaido', color: '#006298', strength: 64, city: '札幌', festival: 'さっぽろ雪まつり' },
+    { id: 'hir', name: '仙台グリフォンズ',     short: '仙台', en: 'Sendai',   color: '#860010', strength: 60, city: '仙台', festival: '仙台七夕まつり' },
+    { id: 'kob', name: '千葉セイラーズ',       short: '千葉', en: 'Chiba',   color: '#222222', strength: 63, city: '千葉', festival: '幕張ビーチ花火フェスタ' },
+    { id: 'snd', name: '埼玉レオンズ',         short: '埼玉', en: 'Saitama',   color: '#1f366a', strength: 66, city: '所沢', festival: '所沢まつり' },
+    { id: 'hkt', name: '大阪バイソンズ',       short: '大阪', en: 'Osaka',   color: '#0a1f4d', strength: 67, city: '大阪', festival: '天神祭' },
   ] },
 };
 const ALL_TEAMS = [...TEAM_CATALOG.central.teams, ...TEAM_CATALOG.pacific.teams];
@@ -2271,7 +2273,7 @@ class GameState {
     data.leagueName = myLg.name;
     data.otherLeague = { name: otherLg.name, teams: otherLg.teams };
     this.profile.pick = pick.id;
-    if (!this.profile.uniform) this.profile.uniform = defaultUniform(this.profile.color, this.profile.short);
+    if (!this.profile.uniform) this.profile.uniform = defaultUniform(this.profile.color, chestText(this.profile));
     this.rules = data.rules;
     this.season = data.season;
     this.ownerRating = data.ownerRating;
@@ -4040,7 +4042,7 @@ class GameState {
   setUniform(u, { free = false, hype = UNIFORM_HYPE, keepColor = false, news = '新ユニフォームを発表！' } = {}) {
     if (!free && this.finance.funds < UNIFORM_COST) return { ok: false, text: `発表には${Util.money(UNIFORM_COST)}かかります` };
     if (!free) this.finance.funds -= UNIFORM_COST;
-    this.profile.uniform = { ...u, text: String(u.text || this.team.short).slice(0, 10) };
+    this.profile.uniform = { ...u, text: String(u.text || chestText(this.profile)).slice(0, 10) };
     if (!keepColor) this.profile.color = this.team.color = u.main;
     this.finance.uniformHype = hype;
     this.finance.fans += 800;
@@ -6032,7 +6034,9 @@ const ShareCard = {
     const W = this.W, H = this.H;
     const c = document.createElement('canvas'); c.width = W; c.height = H;
     const x = c.getContext('2d');
-    try { await Promise.all(['900 40px "Dela Gothic One"', '900 30px "M PLUS 1p"', '700 30px "Oswald"'].map(f => document.fonts.load(f))); } catch (e) { /* フォントがなくても描く */ }
+    // 日本語フォントは文字ごとに分けて配られるので、使う文字を渡して読みこむ
+    const glyphs = '日本一！リーグ優勝位' + (g.gmCareer && g.gmCareer.title ? g.gmCareer.title.name : '');
+    try { await Promise.all(['400 40px "Dela Gothic One"', '900 30px "M PLUS 1p"', '700 30px "Oswald"'].map(f => document.fonts.load(f, glyphs + '0123456789'))); } catch (e) { /* フォントがなくても描く */ }
     const color = g.team.color || '#1f7bff';
     const bg = x.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, '#0b1a44'); bg.addColorStop(1, '#050913');
     x.fillStyle = bg; x.fillRect(0, 0, W, H);
@@ -6041,11 +6045,22 @@ const ShareCard = {
     x.save(); x.globalAlpha = 0.18; x.fillStyle = '#fff';
     for (let i = -H; i < W; i += 26) { x.beginPath(); x.moveTo(i, H); x.lineTo(i + H * 0.45, 0); x.lineTo(i + H * 0.45 + 3, 0); x.lineTo(i + 3, H); x.fill(); }
     x.restore();
+    // ユニフォーム：うしろからスポットライト、少し傾けて光沢と陰影をつける
+    const ux = W - 260, uy = 330;
+    const spot = x.createRadialGradient(ux, uy - 40, 20, ux, uy, 330); spot.addColorStop(0, 'rgba(255,255,255,.55)'); spot.addColorStop(0.45, 'rgba(255,255,255,.12)'); spot.addColorStop(1, 'rgba(255,255,255,0)');
+    x.fillStyle = spot; x.fillRect(ux - 340, 0, 680, H);
     try {
       const img = new Image();
       img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(uniformSVG(g.profile.uniform, num));
       await img.decode();
-      x.save(); x.shadowColor = 'rgba(0,0,0,.55)'; x.shadowBlur = 30; x.drawImage(img, W - 470, 110, 420, 420); x.restore();
+      const size = 460, u = document.createElement('canvas'); u.width = u.height = size;
+      const ux2 = u.getContext('2d'); ux2.drawImage(img, 0, 0, size, size);
+      ux2.globalCompositeOperation = 'source-atop';   // ユニフォームの形の中だけに光と影をのせる
+      const sh = ux2.createLinearGradient(0, 0, size, size * 0.9);
+      sh.addColorStop(0, 'rgba(255,255,255,0)'); sh.addColorStop(0.36, 'rgba(255,255,255,0)'); sh.addColorStop(0.42, 'rgba(255,255,255,.32)'); sh.addColorStop(0.5, 'rgba(255,255,255,0)'); sh.addColorStop(1, 'rgba(0,0,0,.28)');
+      ux2.fillStyle = sh; ux2.fillRect(0, 0, size, size);
+      x.save(); x.fillStyle = 'rgba(0,0,0,.35)'; x.filter = 'blur(10px)'; x.beginPath(); x.ellipse(ux, uy + 225, 170, 22, 0, 0, Math.PI * 2); x.fill(); x.restore();
+      x.save(); x.translate(ux, uy); x.rotate(-0.07); x.shadowColor = 'rgba(0,0,0,.6)'; x.shadowBlur = 40; x.shadowOffsetY = 18; x.drawImage(u, -size / 2, -size / 2); x.restore();
     } catch (e) { /* 絵が描けなくても続ける */ }
     const txt = (t, px, py, size, col = '#fff', font = '"M PLUS 1p"', weight = 700) => { x.font = `${weight} ${size}px ${font}, sans-serif`; x.fillStyle = col; x.fillText(t, px, py); };
     const fit = (t, size, maxW, font, weight) => { let sz = size; x.font = `${weight} ${sz}px ${font}, sans-serif`; while (x.measureText(t).width > maxW && sz > 18) { sz -= 2; x.font = `${weight} ${sz}px ${font}, sans-serif`; } return sz; };
@@ -6084,6 +6099,16 @@ const ShareCard = {
     const W = this.W, H = this.H;
     const { c, x, txt, fit } = await this.base(g, S.mvp ? S.mvp.number : 18);
     const head = this.headline(S), japan = head === '日本一！';
+    // 優勝・日本一は紙吹雪（今日のお題の乱数をずらさないよう、ここだけの乱数で）
+    if (japan || S.rank === 1) {
+      let r = 12345; const rnd = () => (r = (r * 1103515245 + 12345) % 2147483648) / 2147483648;
+      const cols = japan ? ['#ffd23f', '#fff1a8', '#ffffff', '#d99a00'] : ['#ffd23f', '#ffffff'];
+      for (let i = 0; i < 70; i++) {
+        const px = 560 + rnd() * 640, py = rnd() * H * 0.9;
+        x.save(); x.translate(px, py); x.rotate(rnd() * Math.PI); x.globalAlpha = 0.55 + rnd() * 0.45; x.fillStyle = cols[i % cols.length];
+        x.fillRect(-6, -3, 10 + rnd() * 6, 5 + rnd() * 3); x.restore();
+      }
+    }
     txt(`${S.season}年シーズン 結果`, 60, 138, 26, '#a9b6d8');
     const tn = g.team.name, tsz = fit(tn, 64, 640, '"M PLUS 1p"', 900);   // 漢字が多い球団名もそろって見えるように
     txt(tn, 60, 220, tsz, '#fff', '"M PLUS 1p"', 900);
